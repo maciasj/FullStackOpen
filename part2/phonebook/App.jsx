@@ -1,68 +1,61 @@
-
-import Course from "./components/Course"
-const GroupOfCourses = ({ courses }) => {
-  return (
-    <div>
-      {
-        courses.map(course => 
-          <Course key={course.id} course={course} />
-      )}
-    </div>
-  )
-}
+import { useState } from 'react'
+import {Filter} from './components/Filter'
+import { PersonForm } from './components/PersonForm'
+import { Persons } from './components/Persons'
 
 const App = () => {
-  const courses = [
-    {
-      name: 'Half Stack application development',
-      id: 1,
-      parts: [
-        {
-          name: 'Fundamentals of React',
-          exercises: 10,
-          id: 1
-        },
-        {
-          name: 'Using props to pass data',
-          exercises: 7,
-          id: 2
-        },
-        {
-          name: 'State of a component',
-          exercises: 14,
-          id: 3
-        },
-        {
-          name: 'Redux',
-          exercises: 11,
-          id: 4
-        }
-      ]
-    }, 
-    {
-      name: 'Node.js',
-      id: 2,
-      parts: [
-        {
-          name: 'Routing',
-          exercises: 3,
-          id: 1
-        },
-        {
-          name: 'Middlewares',
-          exercises: 7,
-          id: 2
+  const [persons, setPersons] = useState([
+    { name: 'Arto Hellas', telefone: '123456' }
+  ])
+  const [newName, setNewName] = useState('')
+  const [newTelef, setNewTelef] = useState('')
+  const [newFilter, setNewFilter] = useState('')
 
-        }
-      ]
+  const addName = (event) => {
+    event.preventDefault()
+    if (newName === '' || newTelef === '') {
+      alert('Please fill in all fields')
+      return
     }
-  ]
+
+    const nameObject = {
+      name: newName,
+      telefone: newTelef,
+    }
+
+    if (persons.find(person => person.name.toLowerCase() === nameObject.name.toLowerCase())) {
+      alert(`${nameObject.name} is already added to phonebook`)
+      setNewName('')
+      return
+    }
+
+    setPersons(persons.concat(nameObject))
+    setNewName('')
+    setNewTelef('')
+  }
+
+  const handleNameChange = (event) => setNewName(event.target.value)
+  const handleTelefChange = (event) => setNewTelef(event.target.value)
+  const handleFilterChange = (event) => setNewFilter(event.target.value)
 
   return (
-  <div>
-    <GroupOfCourses courses={courses} />
-  </div>
-) 
+    <div>
+      <h2>Phonebook</h2>
+      <Filter value={newFilter} onChange={handleFilterChange} />
+      
+      <h2>Add new</h2>
+      <PersonForm 
+        onSubmit={addName}
+        newName={newName}
+        handleNameChange={handleNameChange}
+        newTelef={newTelef}
+        handleTelefChange={handleTelefChange}
+      />
+
+      <h2>Numbers</h2>
+      <Persons persons={persons} filter={newFilter} />
+    </div>
+  )
 }
 
 export default App

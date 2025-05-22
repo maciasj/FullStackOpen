@@ -1,7 +1,7 @@
 import { useState } from 'react'
-import {Filter} from './components/Filter'
-import { PersonForm } from './components/PersonForm'
-import { Persons } from './components/Persons'
+import {Filter} from '../../part2/phonebook/components/Filter'
+import { PersonForm } from '../../part2/phonebook/components/PersonForm'
+import { Persons } from '../../part2/phonebook/components/Persons'
 
 const App = () => {
   const [persons, setPersons] = useState([
