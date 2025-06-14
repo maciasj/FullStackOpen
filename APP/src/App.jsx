@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import {Filter} from '../../part2/phonebook/components/Filter'
 import { PersonForm } from '../../part2/phonebook/components/PersonForm'
 import { Persons } from '../../part2/phonebook/components/Persons'
@@ -10,6 +11,33 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newTelef, setNewTelef] = useState('')
   const [newFilter, setNewFilter] = useState('')
+  const [notes, setNotes] = useState([])
+  
+  const notesHook = () => {
+      console.log('effect')
+      axios
+        .get('http://localhost:3001/notes')
+        .then(response => {
+          console.log('notes promise fulfilled')
+          setNotes(response.data)
+        })
+    }
+  const personHook = () => {
+        console.log('effect')
+        axios
+          .get('http://localhost:3001/persons')
+          .then(response => {
+            console.log('persons promise fulfilled')
+            setPersons(response.data)
+          })
+      }
+
+  useEffect(notesHook, [])
+        
+  useEffect(personHook, [])
+        
+      
+  console.log('render', notes.length, 'notes')
 
   const addName = (event) => {
     event.preventDefault()
